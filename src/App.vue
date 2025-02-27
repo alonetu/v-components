@@ -1,7 +1,11 @@
 <template>
   <header>
-    <img src="./assets/vue.svg" width="125" height="125" alt="" ref="triggerNode">
-    <div ref="overlayNode"><h1>Hello Tooltip</h1></div>
+    <Tooltip placement="right" :trigger="trigger">
+      <img src="./assets/vue.svg" width="125" height="125" alt="" ref="triggerNode">
+      <template #content>
+        <div ref="overlayNode"><h1>Hello Tooltip</h1></div>
+      </template>
+    </Tooltip>
   </header>
 
   <Button ref="buttonRef" loading>loading</Button>
@@ -41,33 +45,27 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { createPopper } from '@popperjs/core'
-import type { Instance } from '@popperjs/core'
 import Button from './components/Button/Button.vue'
 import Collapse from './components/Collapse/Collapse.vue'
 import Item from './components/Collapse/CollapseItem.vue'
 import Icon from './components/Icon/Icon.vue'
+import Tooltip from './components/Tooltip/Tooltip.vue'
 import type { ButtonInstance } from './components/Button/types'
 
 const buttonRef = ref<ButtonInstance | null>(null)
 const overlayNode = ref<HTMLElement>()
 const triggerNode = ref<HTMLElement>()
-let popperInstance: Instance | null = null
+const trigger = ref<any>('click')
 
 const openedValue = ref(['a'])
 onMounted(() => {
   if (buttonRef.value) {
     console.log('button.value', buttonRef.value.ref)
   }
-  if (overlayNode.value && triggerNode.value) {
-    popperInstance = createPopper(triggerNode.value, overlayNode.value, {
-      placement: 'right'
-    })
-  }
 
   setTimeout(() => {
-    popperInstance?.setOptions({ placement: 'bottom' })
-  }, 2 * 1000);
+    // trigger.value = 'hover'
+  }, 2000);
 })
 </script>
 
